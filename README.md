@@ -44,11 +44,42 @@ Repsitório: https://github.com/josemalcher/Livro-CodeIgniter-Produtividade-na-C
 
 ## <a name="parte1">1 Introdução ao CodeIgniter</a>
  
- Repo: https://github.com/bcit-ci/CodeIgniter
+Repo: https://github.com/bcit-ci/CodeIgniter
 
- Site: https://codeigniter.com/
+1Site: https://codeigniter.com/
 
- 
+Arquivos do projeto do livro: https://github.com/jlamim/livro-codeigniter
+
+Traduções: https://github.com/bcit-ci/codeigniter3-translations
+
+#### \projeto01\index.php
+```php
+/*
+ *---------------------------------------------------------------
+ * SYSTEM DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * This variable must contain the name of your "system" directory.
+ * Set the path if it is not in the same directory as this file.
+ */
+	$system_path = '../system';
+```
+#### \projeto01\application\config\config.php
+```php
+*
+|--------------------------------------------------------------------------
+| Default Language
+|--------------------------------------------------------------------------
+|
+| This determines which set of language files should be used. Make sure
+| there is an available translation if you intend to use something other
+| than english.
+|
+*/
+$config['language']	= 'portuguese';
+```
+
+
 
 [Voltar ao Índice](#indice)
 

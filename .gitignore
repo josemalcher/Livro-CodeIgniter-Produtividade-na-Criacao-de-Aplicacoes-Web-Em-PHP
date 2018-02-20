@@ -37,3 +37,4 @@ application/logs/*
 
 # Exemplos do livro
 exemplos-livro-ci/*
+system/*
