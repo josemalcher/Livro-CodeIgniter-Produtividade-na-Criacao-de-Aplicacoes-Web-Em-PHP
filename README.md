@@ -42,70 +42,75 @@ Repsitório: https://github.com/josemalcher/Livro-CodeIgniter-Produtividade-na-C
 
 ---
 
-## <a name="parte1"></a>
+## <a name="parte1">1 Introdução ao CodeIgniter</a>
+ 
+ Repo: https://github.com/bcit-ci/CodeIgniter
+
+ Site: https://codeigniter.com/
+
+ 
+
+[Voltar ao Índice](#indice)
+
+---
+
+## <a name="parte2">2 Anatomia de um model</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte2"></a>
+## <a name="parte3">3 Anatomia de um controller</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte3"></a>
+## <a name="parte4">4 Anatomia de uma view</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte4"></a>
+## <a name="parte5">5 Criando um site institucional ─ Parte I</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte5"></a>
+## <a name="parte6">6 Criando um site institucional ─ Parte II</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte6"></a>
+## <a name="parte7">7 Validando formulários</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte7"></a>
+## <a name="parte8">8 Enviando e-mails com a library Email</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte8"></a>
+## <a name="parte9">9 Gerenciando sessões com a library Session</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte9"></a>
-
-
-[Voltar ao Índice](#indice)
-
----
-
-## <a name="parte10"></a>
+## <a name="parte10">10 Upload, download e compressão de arquivos</a>
 
 
 [Voltar ao Índice](#indice)
