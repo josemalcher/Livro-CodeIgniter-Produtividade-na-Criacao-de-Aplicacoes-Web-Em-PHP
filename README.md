@@ -137,6 +137,44 @@ SABER MAIS: https://codeigniter.com/user_guide/general/models.html
 
 ## <a name="parte3">3 Anatomia de um controller</a>
 
+O controller é o que dá vida a uma aplicação. Ele determina o que será executado quando uma requisição HTTP é feita. Ele nada mais é do que uma classe com um ou vários métodos que podem ser acessados a partir da URL, ou que estão associados a URLs através das rotas.
+
+```php
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+class Exemplo extends CI_Controller
+{
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->model('Examplo_model');
+        $this->load->library('form_validation');
+    }
+
+    function Index(){
+        $this->load->view('home');
+    }
+    function Login(){
+        $this->load->view('login');
+    }
+}
+```
+Essa URL aciona o método Login() do controller Example , e é associada a ele pela rota $route['login'] = 'Exemplo/Login';
+
+Sem a necessidade de uma rota associada, simplesmente definindo na própria URL, www.doma.in/example/login . Dessa forma, o primeiro segmento da URL ( example ) identifica o controller, e o segundo ( login ) identifica o método.
+
+### 3.1 ENVIANDO PARÂMETROS POR MEIO DA URL
+
+```php
+    $this->uri->segment(posicao_do_segmento);
+
+    //www.doma.in/user/edit/1
+    //$this->uri->segment(3)
+```
+
+Documentação oficial do CI sobre Controllers: https://codeigniter.com/user_guide/general/controllers.html
+
+Documentação oficial do CI sobre Rotas: https://codeigniter.com/user_guide/general/routing.html
 
 [Voltar ao Índice](#indice)
 
