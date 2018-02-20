@@ -87,6 +87,49 @@ $config['language']	= 'portuguese';
 
 ## <a name="parte2">2 Anatomia de um model</a>
 
+Um model é uma classe para trabalhar com as informações do banco de dados. Nela você executa todas as ações necessárias de pesquisa ( SELECT ), adição ( INSERT ), atualização ( UPDATE ) e exclusão ( DELETE ) de informações.
+
+EXEMPO DE MODEL
+
+```php
+<?php
+if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+class Examplo_model extends CI_Model{
+    function __construct()
+    {
+        parent::__construct();
+    }
+
+    function Save($data){
+        $this->db->insert('table',$data);
+        if($this->db->insert_id()){
+            return true;
+        }
+        else{
+            return FALSE;
+        }
+    }
+}
+```
+### 2.1 COMO CARREGAR UM MODEL
+
+```php
+    $this->load->model('NomeDoModel');
+    $this->load->model('NomeDoModel','ApelidoDoModel');
+```
+
+### 2.2 CARREGANDO UM MODEL NO AUTOLOAD
+
+#### application/config/autoload.php
+
+```php
+    $autoload['model'] = array('nome_do_model' => 'novo_nome_do_model');
+```
+
+SABER MAIS: https://codeigniter.com/user_guide/general/models.html
+
+
 
 [Voltar ao Índice](#indice)
 
