@@ -182,6 +182,106 @@ Documentação oficial do CI sobre Rotas: https://codeigniter.com/user_guide/gen
 
 ## <a name="parte4">4 Anatomia de uma view</a>
 
+Uma view nada mais é do que um arquivo HTML, que corresponde a uma tela da aplicação ou fragmento de conteúdo da tela, e que é chamada diretamente pelo controller através do método:
+```php
+$this->load->view()
+
+$this->load->view('home');
+
+$this->load->view('commons/header');
+
+//Carregando muiltiplas views
+$this->load->view('commons/header');
+$this->load->view('home');
+$this->load->view('commons/footer');
+```
+
+### 4.2 ENVIANDO DADOS PARA A VIEW
+
+```php
+$data['title'] = "Título da página";
+$data['content'] = "Conteúdo da página";
+$this->load->view('home', $data);
+```
+Ao recuperar os dados na view, eles deixam de ser um array para se tornarem variáveis simples. Então, em vez de chamar pelo índice, você chama como variável.
+
+```php
+<html>
+<head>
+<title><?=$title?></title>
+</head>
+<body>
+<p><?=$content?></p>
+</body>
+</html>
+```
+
+#### lista de dados para a view
+
+```php
+$data['title'] = "Título da página";
+$data['content'] = "Links Importantes";
+$data['domains'] = array('www.casadocodigo.com.br','www.livrocodeigniter.com.br');
+$this->load->view('home', $data);
+```
+
+```php
+<html>
+<head>
+<title><?=$title?></title>
+</head>
+<body>
+<h1><?=$content?></h1>
+    <ul>
+    <?php foreach($domains as $domain):?>
+        <li><?=$domain?></li>
+    <?php endforeach; ?>
+    </ul>
+</body>
+</html>
+```
+
+### 4.3 RETORNANDO UMA VIEW COMO STRING
+
+Existe um terceiro parâmetro que pode ser aplicado ao método $this->load->view() , que é do tipo booleano e determina se a view será retornada como string , ou se será renderizada no browser.
+
+Como o terceiro parâmetro é opcional, ele tem o valor padrão FALSE , renderizando a view no browser sempre que o método $this->load->view() é chamado.
+
+```php
+$data['destinatario'] = "Jonathan Lamim Antunes";
+$data['assunto'] = "Lançamento do livro 'CodeIgniter Teoria na Prá tica'";
+$this->load->view('templates/email',$data, TRUE);
+```
+
+### 4.4 USANDO TEMPLATE PARSER NA VIEW
+
+O Template Parser é uma biblioteca nativa do CI que permite usar pseudovariáveis no lugar de código PHP. Ao fazer o uso desse recurso, o método usado para carregar a view:
+
+```php
+$this->load->view() ;
+
+$this->parser->parse();
+```
+
+```html
+<html>
+<head>
+<title>{$title}</title>
+</head>
+<body>
+<h1>{$content}</h1>
+<ul>
+{domains}
+<li>{domain}</li>
+{/domains}
+</body>
+</html>
+```
+
+Documentação oficial do CI sobre Views: https://codeigniter.com/user_guide/general/views.html
+
+Documentação oficial do CI sobre Template Parser Library: https://codeigniter.com/user_guide/libraries/parser.html
+
 
 [Voltar ao Índice](#indice)
 
