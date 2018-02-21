@@ -289,6 +289,97 @@ Documentação oficial do CI sobre Template Parser Library: https://codeigniter.
 
 ## <a name="parte5">5 Criando um site institucional ─ Parte I</a>
 
+Controller ─ Responsável por interpretar os dados enviados pelo usuário e efetuar o tratamento necessário, repassando esses dados para a view ou para o model.  
+Model ─ Responsável pelo gerenciamento de dados, podendo repassar esses dados para a view.  
+View ─ Responsável por exibir os dados obtidos e tratados para o usuário.  
+
+#### \site-institucional\application\controllers\Institucional.php
+```php
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+
+class Institucional extends CI_Controller
+{
+    public function index()
+    {
+        $this->load->view('home');
+    }
+}
+?>
+```
+
+### O MÉTODO $THIS->LOAD->VIEW() DO CODEIGNITER
+
+#### $this->load->view('view_file', 'data','return_as_data');
+
+- view_file : é a localização do arquivo da view dentro do diretório application/views . Pode estar dividido em subdiretórios, e não é necessário informar a extensão do arquivo.
+- data : é a variável ( array ou object ) contendo os dados dinâmicos que serão exibidos na view.
+- return_as_data : é um booleano ( TRUE ou FALSE ) que informa se a saída do método vai ser impressa na tela ( FALSE ), ou se vai ser um retorno com o conteúdo da view ( TRUE ). Se não informar esse parâmetro, o conteúdo da view será impresso na tela.
+
+#### \site-institucional\application\views\home.php
+
+```html
+<!DOCTYPE html>
+<html lang="pt_BR">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-sca le=1">
+<meta name="description" content="Exercício de exemplo do capítulo 5 do livro CodeIgniter">
+<meta name="author" content="Jonathan Lamim Antunes">
+<title>Site Institucional</title>
+<link href="<?=base_url('assets/css/bootstrap.min.css')?>" rel="stylesheet">
+<link href="<?=base_url('assets/css/ie10-viewport-bug-workaround.css')?>" rel="stylesheet">
+<link href="<?=base_url('assets/css/home.css') ?>" rel="stylesheet">
+<!--[if lt IE 9]><script src="http://getbootstrap.com/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+<script src="http://getbootstrap.com/assets/js/ie-emulation-modes-warning.js"></script>
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+<body>
+	<div class="site-wrapper">
+		<div class="site-wrapper-inner">
+			<div class="cover-container">
+				<div class="masthead clearfix">
+					<div class="inner">
+						<h1 class="masthead-brand">LCI</h1>
+						<nav>
+							<ul class="nav masthead-nav">
+								<li class="active"><a href="#">Home</a></li>
+								<li><a href="#">A Empresa</a></li>
+								<li><a href="#">Serviços</a></li>
+								<li><a href="#">Trabalhe Conosco</a></li>
+								<li><a href="#">Fale Conosco</a></li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+				<div class="inner cover">
+					<h1 class="cover-heading">Ensinando através da prática</h1>
+					<p class="lead">Até aqui você aprendeu como criar um <i>controller</i>, uma <i>view</i> e a usar a função <i>base_url</i> do helper <i>url</i> utilizando o livro "CodeIgniter: Produtivida de na criação de aplicações web em PHP".</p>
+				</div>
+			</div>
+		</div>
+	</div>
+<script src="<?=base_url('assets/js/jquery.min.js')?>"></script>
+<script src="<?=base_url('assets/js/bootstrap.min.js')?>"></script>
+<script src="<?=base_url('assets/js/ie10-viewport-bug-workaround.js')?>"></script>
+</body>
+</html>
+```
+
+#### O MÉTODO BASE_URL()
+
+Para utilizar as funções do helper URL, é preciso abrir o arquivo application/config/autoload.php , e inserir o nome do helper no array com os helpers a serem carregados.
+#### application/config/autoload.php
+
+```php
+$autoload['helper'] = array('url');
+```
+
+
 
 [Voltar ao Índice](#indice)
 
