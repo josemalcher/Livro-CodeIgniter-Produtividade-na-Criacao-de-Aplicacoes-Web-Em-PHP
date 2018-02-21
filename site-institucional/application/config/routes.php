@@ -53,4 +53,5 @@ $route['default_controller'] = 'Institucional';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-$route['login'] = 'Exemplo/Login';
+$route['empresa'] = "Institucional/Empresa";
+$route['servicos'] = "Institucional/Servicos";

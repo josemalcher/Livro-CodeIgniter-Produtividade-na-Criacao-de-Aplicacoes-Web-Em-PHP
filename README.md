@@ -379,7 +379,174 @@ Para utilizar as funções do helper URL, é preciso abrir o arquivo application
 $autoload['helper'] = array('url');
 ```
 
+#### SOBRE AS ROTAS
 
+São os caminhos das páginas de um site que podem ser configurados para executar um método de um controller específico, cujo nome é diferente do usado na URL.
+
+```
+http://url.com/class/method/variable  
+http://localhost/exemplos-livro-ci/site-institucional/institucional/empresa  
+```
+#### application/config/routes.php
+```php
+$route['default_controller'] = 'Institucional';
+$route['404_override'] = '';
+$route['translate_uri_dashes'] = FALSE;
+
+$route['empresa'] = "Institucional/Empresa";
+$route['servicos'] = "Institucional/Servicos";
+```
+As rotas no CI são informadas em um array , no qual seu índice corresponde ao termo que será utilizado na URL.
+
+#### .htaccess
+
+```
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?$1 [L]
+</IfModule>
+```
+Esse código só será executado caso o mod_rewrite esteja ativado ( <IfModule mod_rewrite.c> ) no Apache; se não estiver, as rotas não vão funcionar. Veja a seguir uma explicação sobre cada linha desse arquivo:
+- Linha 2: ativa a engine de reescrita das URLs;
+- Linhas 3 e 4: se o arquivo com o nome especificado no navegador não existir, procede com a regra de reescrita da linha 5;
+- Linha 5: regra de reescrita da URL, onde ele recupera o valor passado logo após o domínio.
+
+#### site-institucional\application\views\commons\menu.php
+
+```php
+<?php 
+    if ($this->router->fetch_class() == 'Institucional' && $this -> router->fetch_method() == 'index') { ?>
+        <ul class="nav masthead-nav">
+<?php 
+    }else{ 
+?>
+        <ul class="nav navbar-nav">
+<?php } ?>
+            <li class="<?= ($this->router->fetch_class() == 'Institucional' && $this->router->fetch_method() == 'index') ? 'active' : null; ?>"><a href="<?= base_url() ?>" >Home</a></li>
+            <li class="<?= ($this->router->fetch_class() == 'Institucional' && $this->router->fetch_method() == 'Empresa') ? 'active' : null; ?>"><a href="<?= base_url('empresa') ?>" >A Empresa</a></li>
+            <li class="<?= ($this->router->fetch_class() == 'Institucional' && $this->router->fetch_method() == 'Servicos') ? 'active' : null; ?>"><a href="<?= base_url('servicos') ?>" >Serviços</a></li>
+            <li><a href="<?= base_url('trabalhe-conosco') ?>">Trabalhe Conosco</a></li>
+            <li><a href="<?= base_url('fale-conosco') ?>">Fale Conosco</a></li>
+        </ul>
+
+```
+Na primeira linha, temos um if responsável por verificar se a classe chamada ( $this->router->class ) é a Institucional , e se o método é o index . Se for, então a página carregada é a home e o menu recebe as classes para ser formatado no padrão do layout da home. Se for outra classe ou outro método, então é uma página interna e recebe a classe de formatação para as páginas internas.
+
+### 5.5 PASSANDO DADOS DO CONTROLLER PARA A VIEW
+
+```php
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+
+class Institucional extends CI_Controller
+{
+    public function index(){
+        $data['title'] = "LCI | HOME";
+        $data['description'] = "Exercício de exemplo do capítulo 5 do livro CodeIgniter";
+
+        $this->load->view('home',$data);
+    }
+    public function Empresa(){
+        $data['title'] = "LCI | A Empresa";
+        $data['description'] = "Informações sobre a empresa";
+
+        $this->load->view('commons/header', $data);
+        $this->load->view('empresa');
+        $this->load->view('commons/footer');
+    }
+    public function Servicos(){
+        $data['title'] = "LCI | Serviços";
+        $data['description'] = "Informações sobre os serviços prestados";
+
+        $this->load->view('commons/header', $data);
+        $this->load->view('servicos');
+        $this->load->view('commons/footer');
+        
+    }
+}
+?>
+```
+Qualquer dado que for preciso passar do controller para a view deve ser armazenado em uma variável do tipo Array , e essa variável passada como segundo parâmetro do método $this->load->view() . Assim você poderá fazer a exibição dessas informações dentro da view.
+
+
+### 5.6 COMPRIMINDO O HTML DE SAÍDA COM UM HOOK DO CI
+
+Para esse exemplo, você vai minificar o HTML de saída das páginas do site que está criando. A minificação do HTML ajuda a deixar o carregamento da página mais rápido.
+
+#### application/config/config.php
+```php
+$config['enable_hooks'] = FALSE;
+
+//Ajustar para
+$config['enable_hooks'] = TRUE;
+```
+
+#### application/config/hooks.php
+```php
+$hook['display_override'][] = array(
+'class' => '',
+'function' => 'compress',
+'filename' => 'compress.php',
+'filepath' => 'hooks'
+);
+```
+#### site-institucional\application\hooks\compress.php
+
+```php
+<?php if (!defined('BASEPATH')) exit('No direct script access a
+llowed');
+function compress()
+{
+    ini_set("pcre.recursion_limit", "16777");
+    $CI = &get_instance();
+    $buffer = $CI->output->get_output();
+    $re = '%
+(?>
+[^\S ]\s*
+| \s{2,}
+)
+(?=
+[^<]*+
+(?:
+<
+(?!/?(?:textarea|pre|script)\b)
+[^<]*+
+)*+
+(?:
+<
+(?>textarea|pre|script)\b
+| \z
+)
+)
+%Six';
+    $new_buffer = preg_replace($re, " ", $buffer);
+    if ($new_buffer === null) {
+        $new_buffer = $buffer;
+    }
+    $CI->output->set_output($new_buffer);
+    $CI->output->_display();
+}
+```
+
+- Documentação oficial do CI sobre Controllers:
+https://codeigniter.com/user_guide/general/controllers.html
+
+- Documentação oficial do CI sobre o Helper URL:
+https://codeigniter.com/user_guide/helpers/url_helper.html
+
+- Documentação oficial do CI sobre Hooks:
+https://codeigniter.com/user_guide/general/hooks.html
+
+- Documentação oficial do CI sobre Sessions:
+https://codeigniter.com/user_guide/libraries/sessions.html
+
+- Documentação oficial do CI sobre Views:
+https://codeigniter.com/user_guide/general/views.html
+
+- Detalhes sobre Compress HTML Output:
+https://github.com/bcit-ci/CodeIgniter/wiki/Compress-HTML-output.
 
 [Voltar ao Índice](#indice)
 
