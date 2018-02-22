@@ -4,6 +4,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Institucional extends CI_Controller
 {
     public function index(){
+        //$this->output->cache(1440);  //Corresponde a 24 horas até o cache ser atualizado
+
         $data['title'] = "LCI | HOME";
         $data['description'] = "Exercício de exemplo do capítulo 5 do livro CodeIgniter";
 
@@ -27,4 +29,3 @@ class Institucional extends CI_Controller
         
     }
 }
-?>
