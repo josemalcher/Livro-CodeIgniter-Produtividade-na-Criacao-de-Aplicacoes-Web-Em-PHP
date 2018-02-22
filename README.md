@@ -935,11 +935,17 @@ Documentação oficial do CI sobre a Library Form Validation: https://codeignite
 ## <a name="parte7">7 Validando formulários</a>
 
 
+- Documentação oficial do CI sobre a library Form Validation: https://codeigniter.com/user_guide/libraries/form_validation.html
+
+
 [Voltar ao Índice](#indice)
 
 ---
 
 ## <a name="parte8">8 Enviando e-mails com a library Email</a>
+
+- http://www.universidadecodeigniter.com.br/enviando-emailscom-a-library-nativa-do-codeigniter
+- Documentação oficial do CI sobre a library Email: https://codeigniter.com/user_guide/libraries/email.html
 
 
 [Voltar ao Índice](#indice)
@@ -948,6 +954,9 @@ Documentação oficial do CI sobre a Library Form Validation: https://codeignite
 
 ## <a name="parte9">9 Gerenciando sessões com a library Session</a>
 
+- http://www.universidadecodeigniter.com.br/trabalhando-comsessoes
+- Documentação oficial do CI sobre a Library Session: https://codeigniter.com/user_guide/libraries/sessions.html
+- Dica de livro sobre Redis: https://www.casadocodigo.com.br/products/livro-redis
 
 [Voltar ao Índice](#indice)
 
@@ -955,124 +964,500 @@ Documentação oficial do CI sobre a Library Form Validation: https://codeignite
 
 ## <a name="parte10">10 Upload, download e compressão de arquivos</a>
 
+- http://www.universidadecodeigniter.com.br/upload-edownload-de-arquivos
+- http://www.universidadecodeigniter.com.br/compressao-de-arquivos
 
-[Voltar ao Índice](#indice)
-
----
-
-## <a name="parte11"></a>
-
-
-[Voltar ao Índice](#indice)
-
----
-
-## <a name="parte12"></a>
+- Documentação oficial do CI sobre a library File Uploading: https://codeigniter.com/user_guide/libraries/file_uploading.html
+- Documentação oficial do CI sobre o helper Download: https://codeigniter.com/user_guide/helpers/download_helper.html
+- Documentação oficial do CI sobre a library ZIP Encoding: https://codeigniter.com/user_guide/libraries/zip.html
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte32"></a>
+## <a name="parte11">11 Implementando CAPTCHA nativo</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte14"></a>
+## <a name="parte12">12 Criando um encurtador de URLs ─ Parte I</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte15"></a>
+## <a name="parte12">13 Criando um encurtador de URLs ─ Parte II</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte16"></a>
+## <a name="parte14">14 Trabalhando com banco de dados</a>
+
+
+### 14.3 EXECUTANDO CONSULTAS COM $THIS->DB->QUERY()
+
+```php
+$query = $this->db->query('SELECT * FROM users');
+```
+
+Com parâmetros
+```php
+$sql = "SELECT * FROM users WHERE id = ? AND status = ? AND name = ?";
+$this->db->query($sql, array(3, 'active', 'Lamim'));
+```
+
+O retorno do método $this->db->query() é um objeto no qual você terá vários outros métodos para trabalhar com os resultados da query executada. Esses métodos vão desde o total de resultados até a obtenção de um array com a lista de resultados.
+ 
+#### $THIS->DB
+
+Sempre que precisar utilizar um método relacionado a banco de dados no CI, exceto para a classe Database Utility , você deverá usar $this->db , pois é a indicação da instância e da classe onde os métodos estão localizados.
+
+#### result()
+
+Ele retorna um array de objetos, um array vazio, ou então um erro. Ele é muito utilizado em combinação com um foreach().
+
+```php
+$query = $this->db->query("SELECT * FROM users");
+    foreach ($query->result() as $row){
+        echo $row->name;
+        echo $row->status;
+    }
+    
+```
+Se você quiser obter uma linha específica dentro do array , basta passar como parâmetro o número da linha.
+
+```php
+$query = $this->db->query("SELECT * FROM users");
+$row = $query->row(3);
+    if (isset($row)){
+        echo $row->name;
+        echo $row->status;
+    }
+```
+
+#### row()
+
+Ele retorna uma única linha do resultado da consulta, e é sempre a primeira.
+
+```php
+$query = $this->db->query("SELECT * FROM users");
+$row = $query->row();
+    if (isset($row)){
+        echo $row->name;
+        echo $row->status;
+    }
+```
+
+#### num_rows()
+
+Ele retorna a quantidade de registros encontrados na consulta.
+
+```php
+$query = $this->db->query('SELECT * FROM users');
+echo $query->num_rows();
+```
+
+### 14.4 QUERY HELPER
+
+O Query Builder é um conjunto de métodos para obtenção de informações da query e do banco de dados.
+
+#### insert_id()
+
+Ele retorna o ID da última instrução INSERT executada.
+
+```php
+    $this->db->insert_id()
+```
+
+#### affected_rows()
+
+Ele retorna o número de linhas afetadas pela instrução executada.
+
+```php
+    $this->db->affected_rows();
+```
+
+#### last_query()
+
+Ele retorna a string da última instrução SQL executada.
+
+```php
+    $this->db->last_query();
+```
+
+#### count_all()
+
+Ele retorna o total de registros de uma tabela. Para isso, basta passar como parâmetro o nome da tabela.
+
+```php
+$this->db->count_all('users');
+```
+
+### 14.5 QUERY BUILDER
+
+É um conjunto de métodos nativos do CI que permite operações com banco de dados de forma mais simples, com menos código e sem a necessidade de escrever as instruções SQL manualmente.
+
+#### get()
+Executa a consulta e retorna o resultado. Pode ser usado para recuperar todos os registros de uma tabela passando como parâmetro o nome da tabela.
+
+```php
+    $query = $this->db->get('users');
+    
+    //Instrução equivalente: SELECT * FROM users
+```
+Se passar mais dois parâmetros, você consegue limitar a quantidade de registros retornados.
+
+```php
+    $query = $this->db->get('users', 5, 10);
+    
+    //Equivalente a: SELECT * FROM users LIMIT 10, 5
+```
+
+#### get_where()
+
+Idêntico ao método anterior, exceto que ele permite que você adicione uma cláusula where no segundo parâmetro em vez de usar o $this->db->where . O terceiro e quarto parâmetros podem ser utilizados para determinar os limites da quantidade de registros retornados.
+
+```php
+    $query = $this->db->get_where('users', array('id' => 3), 5, 10);
+    
+    //Equivalente a: SELECT * FROM users WHERE id = 3 LIMIT 10, 5
+```
+
+#### select()
+
+Método que define quais serão os campos da(s) tabela(s) a serem retornados na consulta.
+
+```php
+$this->db->select('*'); //Equivalente a: SELECT *
+$this->db->select('name, status'); 
+
+//Equivalente a: SELECT name, status
+```
+
+#### from()
+
+Método que define a tabela na qual a consulta será realizada.
+
+```php
+    $this->db->from('users');
+    $this->db->select('name, status')->from('users');
+    
+    //Equivalente a: SELECT name, status FROM users
+```
+
+#### join()
+
+Método utilizado para fazer consultas onde é necessário usar a instrução SQL JOIN, que junta registros de outras tabelas na mesma consulta. Ele recebe dois parâmetros, sendo que o primeiro é o nome da tabela e o segundo são os valores que se equivalem para retorno dos dados.
+
+```php
+    $this->db->select('*');
+    $this->db->from('posts');
+    $this->db->join('comments', 'comments.id = posts.id');
+    
+    // Equivalente a: SELECT * FROM posts JOIN comments ON comments.id= posts.id
+```
+Ele aceita ainda um terceiro parâmetro, que pode conter os valores left ou right , que fazer com que sejam executados, respectivamente, LEFT JOIN ou RIGHT JOIN em vez de um simples JOIN .
+
+#### where()
+
+Esse método permite que você defina cláusulas where usando um dos quatro métodos:
+
+- Chave/valor: onde a comparação será sempre usando o comparador = (igual).
+
+```php
+    $this->db->where('name', 'Lamim'); 
+    // Equivalente a:WHERE name = "Lamim"
+```
+- Chave/valor customizada: onde você pode definir o operador de comparação a ser utilizado:
+```php
+    $this->db->where('name !=', 'Lamim'); 
+    
+// Equivalente a: WHERE name != "Lamim"
+
+    $this->db->where('id >', 3); 
+    
+// Equivalente a: WHERE id > 3
+```
+
+- Array associativo: onde você pode utilizar um array para definir as comparações.
+```php
+    $array = array('name' => 'Lamim', 'status' => 'active');
+    $this->db->where($array);
+    
+// Equivalente a: WHERE name = 'Lamim' AND status ='active'
+```
+
+- String customizada: onde você pode customizar a string da cláusula where .
+
+```php
+$where = "name='Lamim' OR status='active'";
+$this->db->where($where); 
+
+//Equivalente a: WHERE name='Lamim' OR status='active'
+```
+
+#### or_where()
+É idêntico ao método anterior, mas adiciona um or à cláusula where .
+
+```php
+$this->db->where('name !=', 'Lamim');
+$this->db->or_where('id >', 3); 
+
+// Equivalente a: WHERE name != 'Lamim' OR id > 3
+```
+
+#### like()
+
+Este método permite gerar cláusulas like , muito úteis para fazer sistemas de buscas de blogs, por exemplo.
+
+- Chave/valor:
+```php
+$this->db->like('name', 'Lamim');
+
+// Equivalente a: WHERE name LIKE '%Lamim%' ESCAPE '!'
+```
+- Array associativo
+```php
+$array = array('name' => 'Lamim', 'status' => 'active');
+$this->db->like($array);
+
+// Equivalente a: WHERE name LIKE '%Lamim%' ESCAPE '!' AND status LIKE '%active%' ESCAPE '!'
+```
+
+#### or_like()
+Idem ao método anterior, porém adicionando um or à cláusula like;
+
+```php
+$this->db->like('name', 'Lamim')->or_like('status','active');
+
+// Equivalente a: WHERE name LIKE '%Lamim%' ESCAPE '!' OR name LIKE '%Lamim%' ESCAPE '!'
+```
+
+#### not_like()
+Idêntico ao like() , mas adiciona um not antes.
+
+```php
+$this->db->not_like('name', 'Lamim');
+
+// equivalente a: WHERE name NOT LIKE '%Lamim%' ESCAPE '!'
+```
+
+#### group_by()
+Esse método adiciona uma cláusula group by à consulta.
+```php
+$this->db->group_by("name"); 
+
+// Equivalente a: GROUP BY name
+```
+
+Também pode ser passado um array como parâmetro:
+```php
+$this->db->group_by(array('name','status')); 
+
+// Equivalente a: GROUP BY name, status
+
+```
+
+#### order_by()
+
+Esse método adiciona uma cláusula order by à consulta. Ele aceita dois parâmetros: o primeiro é o nome do campo da tabela para a ordenação, e o segundo é a direção do resultado ( asc , desc ou random ).
+
+```php
+$this->db->order_by('name', 'DESC');
+
+// Equivalente a: ORDER BY `name` DESC
+```
+O primeiro parâmetro também pode ser uma string com a cláusula order by já escrita:
+
+```php
+$this->db->order_by('name DESC, id ASC');
+
+// Equivalente a: ORDER BY name DESC, id ASC
+```
+
+
+#### limit()
+Esse método permite limitar o número de linhas retornadas pela consulta. Ele aceita até dois parâmetros: o primeiro é o número de linhas e o segundo é o deslocamento do resultado.
+
+```php
+$this->db->limit(5); // Equivalente a: LIMIT 5
+$this->db->limit(5, 10); // Equivalente a: LIMIT 10, 5
+```
+
+#### count_all_results()
+Esse método retorna o número de registros da consulta realizada. Você pode passar como parâmetro o nome da tabela, ou então usar de forma combinada com alguns dos métodos apresentados anteriormente.
+
+```php
+$this->db->count_all_results('users'); // Retorna um inteiro, que equivale ao total de registros na tabela users
+$this->db->like('name', 'Lamim');
+$this->db->from('users');
+$this->db->count_all_results(); // Retorna o total de registros da tabela users que possuem Lamim no nome
+```
+
+Todos os métodos listados podem ser concatenados para que se obtenham queries mais completas e, até mesmo, mais complexas.
+
+### Obtendo os resultados das queries executadas
+
+Para obter os resultados de uma query, você pode combinar os métodos get() e result() e obter como retorno um array com os resultados da consulta.
+
+```php
+$this->db->select('name')
+$this->db->from('users');
+$this->db->like('name', 'Lamim');
+$results = $this->db->get()->result();
+```
+
+### 14.6 CRUD
+
+#### insert()
+
+Esse método gera uma sequência de inserção com base nos dados fornecidos e executa a consulta. Você pode passar um array ou um objeto como segundo parâmetro, pois o primeiro deverá ser sempre o nome da tabela na qual o insert será executado.
+
+```php
+$data = array(
+    'name' => 'Antunes',
+    'status' => 'inactive'
+);
+
+$this->db->insert('users', $data);
+
+// Equivalente a: INSERT INTO users (name, status) VALUES ('Antunes', 'inactive')
+```
+
+#### update()
+Esse método gera uma sequência de atualização com base nos dados fornecidos e executa a consulta. Você pode passar um array ou um objeto como segundo parâmetro, pois o primeiro deverá ser sempre o nome da tabela na qual o update será executado.
+```php
+$data = array(
+    'name' => 'Jonathan Lamim',
+    'status' => 'active'
+);
+
+$this->db->where('id', 3);
+$this->db->update('users', $data);
+
+// Equivalente a: UPDATE users SET name = 'Jonathan Lamim', status= 'active' WHERE id = 3
+```
+
+#### delete()
+
+Esse método gera e executa uma string para exclusão de registros do banco de dados. Ele pode receber os parâmetros da seguinte forma:
+
+- Nome da tabela:
+```php
+$this->db->where('id',3);
+$this->db->delete('users'); 
+// Equivalente a: 
+// DELETE FROM users WHERE id = 3
+```
+
+- Nome da tabela / Array com identificador do registro a ser removido:
+
+```php
+$this->db->delete('users', array('id' => 3)); 
+// Equivalente a: 
+// DELETE FROM users WHERE id = 3
+```
+
+### Leia mais
+
+- http://www.universidadecodeigniter.com.br/criando-um-crudcom-codeigniter/  
+- Documentação oficial do CI sobre banco de dados: https://codeigniter.com/user_guide/database/index.html  
+
+[Voltar ao Índice](#indice)
+
+---
+
+## <a name="parte15">15 Paginação de resultados</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte17"></a>
+## <a name="parte16">16 Usando template parser</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte18"></a>
+## <a name="parte17">17 Manipulando imagens</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte19"></a>
+## <a name="parte18">18 Trabalhando com Composer</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte20"></a>
+## <a name="parte19">19 Poupando tempo de desenvolvimento com funcionalidades nativas do CodeIgniter</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte21"></a>
+## <a name="parte20">20 Migrando um projeto da versão 2.x para a 3.x</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte22"></a>
+## <a name="parte21">21 Mantendo a estrutura de banco de dados atualizada com Migrations</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte23"></a>
+## <a name="parte22">22 Apêndice A</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte24"></a>
+## <a name="parte23">23 Apêndice B</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte25"></a>
+## <a name="parte24">24 Apêndice C</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte26"></a>
+## <a name="parte25">25 Apêndice D</a>
 
 
 [Voltar ao Índice](#indice)
 
 ---
 
-## <a name="parte27"></a>
+## <a name="parte26">26 Apêndice E</a>
+
+
+[Voltar ao Índice](#indice)
+
+---
+
+## <a name="parte27">27 Conclusão</a>
 
 
 [Voltar ao Índice](#indice)
